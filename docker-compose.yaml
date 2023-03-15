@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+
+  # Nginx Service
+  phalcon_nginx:
+    image: nginx:1.19-alpine
+    container_name: phalcon_nginx
+    restart: unless-stopped
+    volumes:
+      - ./app:/var/www/php/app
+      - ./public:/var/www/php/public
+      - ./.docker/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - phalcon_api
+
+  # PHP Service
+  phalcon_api:
+    build:
+      context: ./.docker/php
+      dockerfile: Dockerfile
+    container_name: phalcon_api
+    restart: unless-stopped
+    working_dir: /var/www/php
+    env_file:
+      - ./.docker/.env
+
+    volumes:
+      - ./app:/var/www/php/app
+      - ./public:/var/www/php/public
+      - ./tmp:/var/www/php/tmp
+      - ./.docker/php/conf.d/php.ini:/usr/local/etc/php/conf.d/php.ini
+      - ./composer.json:/var/www/php/composer.json
+      - composer_data:/var/www/php/vendor
+
+# Volumes
+volumes:
+  composer_data:
+
+networks:
+  default:
+    name: docker_network

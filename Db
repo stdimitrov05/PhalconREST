@@ -1,0 +1,39 @@
+CREATE TABLE `users` (
+  `id` int UNSIGNED NOT NULL,
+  `username` varchar(20) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `password` varchar(255) DEFAULT NULL,
+  `balance` int NOT NULL DEFAULT '0',
+  `active` tinyint DEFAULT '0',
+  `created_at` int DEFAULT NULL,
+  `deleted_at` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `username` (`username`),
+  ADD UNIQUE KEY `email` (`email`);
+
+ALTER TABLE `users`
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=66;
+COMMIT;
+
+
+
+CREATE TABLE `failed_logins` (
+  `id` int UNSIGNED NOT NULL,
+  `user_id` int UNSIGNED DEFAULT NULL,
+  `ip_address` varchar(39) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `user_agent` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
+  `attempted` int UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+ALTER TABLE `failed_logins`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `userId` (`user_id`);
+
+ALTER TABLE `failed_logins`
+  MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+COMMIT;

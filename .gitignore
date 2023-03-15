@@ -1,0 +1,6 @@
+vendor
+tmp
+.idea
+.phalcon
+composer.lock
+.DS_Store

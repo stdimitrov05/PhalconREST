@@ -18,10 +18,12 @@ use Phalcon\Encryption\Security\JWT\Exceptions\ValidatorException;
 class AuthService extends AbstractService
 {
     /**
+     * Authenticates a user by their email or username and password.
      * @param array $data
-     * @return array
      * @throws ValidatorException
+     * @throws ServiceException
      * @throws \RedisException
+     * @return array
      */
     public function login(array $data): array
     {
@@ -71,29 +73,27 @@ class AuthService extends AbstractService
             'accessToken' => $tokens['accessToken'],
             'refreshToken' => $tokens['refreshToken']
         ];
-
     }
 
     /**
-     * refreshJwtTokens
-     * @retrun array
+     * Refresh JWT tokens for authenticated user
+     * @throws Http404Exception
+     * @throws Http422Exception
+     * @throws Http500Exception
      * @throws \RedisException
      * @throws ValidatorException
+     * @retrun array 
      */
     public function refreshJwtTokens(): array
     {
-
-        // Get JWT refresh token from headers
-        $jwt = $this->jwt->getAuthorizationToken();
-        $token = $this->jwt->decode($jwt);
-
-        $this->jwt->validateJwt($token);
+        // Validate jwt 
+        $this->jwt->verifyToken();
 
         // Check if jti is in the white list (redis)
         $jti = $token->getClaims()->getPayload()['jti'];
         $this->redisService->isJtiInWhiteList($jti);
 
-        $userId = $token->getClaims()->getPayload()['sub'];
+        $userId = $this->userId();
         // Remove JTI form redis white list and from user set
         $this->redisService->removeJti($jti, $userId);
 
@@ -110,7 +110,7 @@ class AuthService extends AbstractService
     }
 
     /**
-     * Get user ID
+     * Get the user ID from the JWT token
      * @retrun int
      * */
     public function userId(): int

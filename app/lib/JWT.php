@@ -105,7 +105,7 @@ class JWT extends AbstractService
     }
 
     /**
-     * Validate JWT token
+     * Validate JWT tokens
      * @param Token $token
      * @throws ValidatorException
      */

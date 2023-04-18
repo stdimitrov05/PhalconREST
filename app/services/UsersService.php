@@ -18,10 +18,13 @@ use Phalcon\Encryption\Security\JWT\Signer\Hmac;
 class UsersService extends AbstractService
 {
     /**
+     * Creates a new user account based on the provided data.
      * @param array $data
-     * @return null
+     * @throws ServiceException
+     * @return void 
+     * 
      */
-    public function create(array $data)
+    public function create(array $data): void
     {
         $user = new Users();
         $user->assign($data);
@@ -36,7 +39,6 @@ class UsersService extends AbstractService
 
        // Send email .....
 
-        return null;
     }
 
 

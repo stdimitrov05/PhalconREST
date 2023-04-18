@@ -14,7 +14,7 @@ class FrontendController extends AbstractController
      * Index action
      * @return array
      */
-    public function indexAction(): array
+    public function index(): array
     {
         try {
             $response = $this->frontendService->index();

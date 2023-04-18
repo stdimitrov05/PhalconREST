@@ -7,7 +7,7 @@ Frontend
 $frontendCollection = new \Phalcon\Mvc\Micro\Collection();
 $frontendCollection->setPrefix(API_VERSION)
   ->setHandler('\App\Controllers\FrontendController', true)
-  ->get('/', 'indexAction');
+  ->get('/', 'index');
 $app->mount($frontendCollection);
 
 /*============================

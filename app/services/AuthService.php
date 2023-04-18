@@ -121,8 +121,7 @@ class AuthService extends AbstractService
 
 
     /**
-     * Verify JWT token
-     *
+     * Verify if the JWT token in the request header is valid.
      * @return bool
      * @throws ValidatorException
      */

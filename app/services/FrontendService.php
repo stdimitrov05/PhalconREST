@@ -10,6 +10,7 @@ namespace App\Services;
 class FrontendService extends AbstractService
 {
     /**
+     * Returns the status of the API
      * @return array
      */
     public function index(): array

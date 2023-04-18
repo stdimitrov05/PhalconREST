@@ -9,8 +9,6 @@ use Phalcon\Encryption\Security\JWT\Exceptions\ValidatorException;
 use Phalcon\Encryption\Security\JWT\Signer\Hmac;
 
 /**
- * Business-logic for site frontend
- *
  * @UsersService
  * @\App\Services\UsersService
  * @uses \App\Services\AbstractService

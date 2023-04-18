@@ -126,7 +126,6 @@ class JWT extends AbstractService
                 self::ERROR_BAD_TOKEN
             );
         }
-
     }
 
     /**

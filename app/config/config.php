@@ -36,9 +36,9 @@ return new \Phalcon\Config\Config(
         ],
         'auth' => [
             'key' => getenv('JWT_KEY'),
-            'accessTokenExpire' => getenv('JWT_ACCESS_TOKEN_EXPIRE'),
-            'refreshTokenExpire' => getenv('JWT_REFRESH_TOKEN_EXPIRE'),
-            'refreshTokenRememberExpire' => getenv('JWT_REFRESH_TOKEN_REMEMBER_EXPIRE'),
+            'accessTokenExpire' => (int)getenv('JWT_ACCESS_TOKEN_EXPIRE'),
+            'refreshTokenExpire' => (int)getenv('JWT_REFRESH_TOKEN_EXPIRE'),
+            'refreshTokenRememberExpire' => (int)getenv('JWT_REFRESH_TOKEN_REMEMBER_EXPIRE'),
             'ignoreUri' => [
                 '/',
                 '/signup:POST',

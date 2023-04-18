@@ -2,14 +2,14 @@
 
 return new \Phalcon\Config\Config(
     [
-        'database' => [
-            'adapter' => getenv('DATABASE_ADAPTER'),
-            'host' => getenv('DATABASE_HOST'),
-            'username' => getenv('DATABASE_USERNAME'),
-            'password' => getenv('DATABASE_PASSWORD'),
-            'dbname' => getenv('DATABASE_NAME'),
-            'charset' => getenv('DATABASE_CHARSET'),
-            'collation' => getenv('DATABASE_COLLATION')
+         'db' => [
+            'adapter' => getenv('DB_ADAPTER'),
+            'host' => getenv('DB_HOST'),
+            'username' => getenv('DB_USERNAME'),
+            'password' => getenv('DB_PASSWORD'),
+            'dbname' => getenv('DB_NAME'),
+            'charset' => getenv('DB_CHARSET'),
+            'collation' => getenv('DB_COLLATION')
         ],
         'application' => [
             'controllersDir' => "app/controllers/",

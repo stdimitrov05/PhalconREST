@@ -19,7 +19,7 @@ class CORSMiddleware implements MiddlewareInterface
      * @param Micro $application
      * @return true|void
      */
-    public function beforeHandleRoute(Event $event, Micro $application): true|void
+    public function beforeHandleRoute(Event $event, Micro $application)
     {
         if ($application->request->getHeader('ORIGIN')) {
             $origin = $application->request->getHeader('ORIGIN');

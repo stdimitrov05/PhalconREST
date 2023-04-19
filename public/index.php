@@ -15,25 +15,20 @@ try {
     // Autoload classes
     require APP_PATH . '/config/loader.php';
 
-
     // Loading config
-    $config = require(APP_PATH . '/config/config.php');
-
+    $config = require APP_PATH . '/config/config.php';
 
     // Initializing DI container
     $di = require APP_PATH . '/config/di.php';
 
-
     // Create a new Events Manager
     $eventsManager = new \Phalcon\Events\Manager();
-
 
     // Initializing application
     $app = new \Phalcon\Mvc\Micro($di);
 
     // Setting up routing
     require APP_PATH . '/config/routes.php';
-
 
     // Executed before every route is executed
     // Return false cancels the route execution

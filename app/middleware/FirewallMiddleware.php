@@ -23,8 +23,7 @@ class FirewallMiddleware implements MiddlewareInterface
     public function beforeHandleRoute(Event $event, Micro $application): bool
     {
         $whitelist = [
-            '192.168.50.1',
-            '84.54.189.83' // Office public
+        // Add white list ip address 
         ];
 
         $ipAddress = $application->request->getClientAddress();

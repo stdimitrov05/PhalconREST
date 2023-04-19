@@ -17,28 +17,16 @@ use App\Lib\JWT;
  */
 abstract class AbstractService extends \Phalcon\DI\Injectable
 {
-    /**
-     * Invalid parameters anywhere
-     */
     const ERROR_INVALID_PARAMETERS = 10010;
 
-    /**
-     * Record already exists
-     */
-    const ERROR_ALREADY_EXISTS = 10020;
+    const ERROR_NOT_FOUND = 10040;
+    const ERROR_UNABLE_TO_CREATE = 10050;
+    const ERROR_UNABLE_TO_DELETE = 10060;
 
-    // Record  not found
-    const  ERROR_NOT_FOUND = 10040;
+    const ERROR_USER_NOT_ACTIVE = 11010;
+    const ERROR_WRONG_EMAIL_OR_PASSWORD = 11020;
+    const ERROR_ACCOUNT_DELETED = 11030;
 
-    const  ERROR_UNABLE_TO_CREATE = 10050;
-    const  ERROR_UNABLE_TO_DELETE = 10060;
-
-    // Users errors
-    const ERROR_USER_NOT_ACTIVE = 12010;
-    const ERROR_WRONG_EMAIL_OR_PASSWORD = 12020;
-    const ERROR_ACCOUNT_DELETED = 12030;
-
-    // JWT errors
-    const ERROR_BAD_TOKEN = 13020;
+    const ERROR_BAD_TOKEN = 12010;
 
 }

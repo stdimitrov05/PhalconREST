@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Exceptions\HttpExceptions\Http404Exception;
+use App\Exceptions\HttpExceptions\Http422Exception;
+use App\Exceptions\HttpExceptions\Http500Exception;
 use App\Exceptions\ServiceException;
 use App\Models\LoginsFailed;
 use App\Models\Users;
@@ -18,10 +21,12 @@ use Phalcon\Encryption\Security\JWT\Exceptions\ValidatorException;
 class AuthService extends AbstractService
 {
     /**
+     * Authenticates a user by their email or username and password.
      * @param array $data
-     * @return array
      * @throws ValidatorException
+     * @throws ServiceException
      * @throws \RedisException
+     * @return array
      */
     public function login(array $data): array
     {
@@ -71,34 +76,33 @@ class AuthService extends AbstractService
             'accessToken' => $tokens['accessToken'],
             'refreshToken' => $tokens['refreshToken']
         ];
-
     }
 
     /**
-     * refreshJwtTokens
-     * @retrun array
+     * Refresh JWT tokens for authenticated user
+     * @throws Http404Exception
+     * @throws Http422Exception
+     * @throws Http500Exception
      * @throws \RedisException
      * @throws ValidatorException
+     * @retrun array 
      */
     public function refreshJwtTokens(): array
     {
-
-        // Get JWT refresh token from headers
-        $jwt = $this->jwt->getAuthorizationToken();
-        $token = $this->jwt->decode($jwt);
-
-        $this->jwt->validateJwt($token);
+        // Validate jwt 
+        $this->verifyToken();
+        $token = $this->getJwtPayloads();
 
         // Check if jti is in the white list (redis)
-        $jti = $token->getClaims()->getPayload()['jti'];
+        $jti = $token['jti'];
         $this->redisService->isJtiInWhiteList($jti);
 
-        $userId = $token->getClaims()->getPayload()['sub'];
+        $userId = $this->userId();
         // Remove JTI form redis white list and from user set
         $this->redisService->removeJti($jti, $userId);
 
         // Determine remember me
-        $tokenExpiration = $token->getClaims()->getPayload()['exp'] - $token->getClaims()->getPayload()['nbf'];
+        $tokenExpiration = $token['exp'] - $token['nbf'];
         $remember = $tokenExpiration > $this->config->auth->refreshTokenExpire ? 1 : 0;
 
         $newTokens = $this->jwt->generateTokens($userId, $remember);
@@ -110,7 +114,7 @@ class AuthService extends AbstractService
     }
 
     /**
-     * Get user ID
+     * Get the user ID from the JWT token
      * @retrun int
      * */
     public function userId(): int
@@ -121,8 +125,7 @@ class AuthService extends AbstractService
 
 
     /**
-     * Verify JWT token
-     *
+     * Verify if the JWT token in the request header is valid.
      * @return bool
      * @throws ValidatorException
      */
@@ -134,6 +137,19 @@ class AuthService extends AbstractService
         $this->jwt->validateJwt($token);
         return true;
     }
+
+    /**
+     * Decode jwt token and get Payloads
+     * @return array
+     */
+    public function getJwtPayloads(): array
+    {
+        // Get JWT refresh token from headers
+        $jwt = $this->jwt->getAuthorizationToken();
+        $token = $this->jwt->decode($jwt);
+        return $token->getClaims()->getPayload();
+    }
+
 
     /**
      * Implements login throttling

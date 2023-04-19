@@ -9,8 +9,6 @@ use Phalcon\Encryption\Security\JWT\Exceptions\ValidatorException;
 use Phalcon\Encryption\Security\JWT\Signer\Hmac;
 
 /**
- * Business-logic for site frontend
- *
  * @UsersService
  * @\App\Services\UsersService
  * @uses \App\Services\AbstractService
@@ -18,17 +16,19 @@ use Phalcon\Encryption\Security\JWT\Signer\Hmac;
 class UsersService extends AbstractService
 {
     /**
+     * Creates a new user account based on the provided data.
      * @param array $data
-     * @return null
+     * @throws ServiceException
+     * @return void 
      */
-    public function create(array $data)
+    public function create(array $data): void
     {
         $user = new Users();
         $user->assign($data);
         $isCreated = $user->create();
 
-        if ($isCreated !== true) {
-            throw  new ServiceException(
+        if (!$isCreated) {
+            throw new ServiceException(
                 'Unable to create user',
                 self::ERROR_UNABLE_TO_CREATE
             );
@@ -36,7 +36,6 @@ class UsersService extends AbstractService
 
        // Send email .....
 
-        return null;
     }
 
 

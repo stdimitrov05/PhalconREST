@@ -50,6 +50,19 @@ RUN docker-php-ext-enable \
 
 # Clear cache and remove unnecessary files
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+# Composer
+COPY --from=composer /usr/bin/composer /usr/local/bin/composer
+# Bash script with helper aliases
+COPY ./.bashrc /root/.bashrc
+COPY ./.bashrc /home/phalcon/.bashrc
+
+# Composer
+COPY --from=composer /usr/bin/composer /usr/local/bin/composer
+
+# Bash script with helper aliases
+COPY ./.bashrc /root/.bashrc
+COPY ./.bashrc /home/phalcon/.bashrc
+
 
 # Set the default command to run PHP-FPM
 CMD ["php-fpm"]

@@ -105,7 +105,7 @@ class JWT extends AbstractService
     }
 
     /**
-     * Validate JWT token
+     * Validate JWT tokens
      * @param Token $token
      * @throws ValidatorException
      */
@@ -126,7 +126,6 @@ class JWT extends AbstractService
                 self::ERROR_BAD_TOKEN
             );
         }
-
     }
 
     /**

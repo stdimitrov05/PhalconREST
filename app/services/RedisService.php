@@ -27,7 +27,7 @@ class RedisService extends AbstractService
 
         $transaction = $redis->multi()
             ->sAdd($setName, $jti)               // Store jti in set
-            ->set($wlJti, 1)             // Whitelist refresh token (wl_jti.... => 1)
+            ->set($wlJti, 1)                     // Whitelist refresh token (wl_jti.... => 1)
             ->expire($wlJti, $expire)            // Redis key expire when JWT expire
             ->exec();
 

@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Exceptions\HttpExceptions\Http404Exception;
+use App\Exceptions\HttpExceptions\Http422Exception;
+use App\Exceptions\HttpExceptions\Http500Exception;
 use App\Exceptions\ServiceException;
 use App\Models\LoginsFailed;
 use App\Models\Users;
@@ -87,10 +90,11 @@ class AuthService extends AbstractService
     public function refreshJwtTokens(): array
     {
         // Validate jwt 
-        $this->jwt->verifyToken();
+        $this->verifyToken();
+        $token = $this->getJwtPayloads();
 
         // Check if jti is in the white list (redis)
-        $jti = $token->getClaims()->getPayload()['jti'];
+        $jti = $token['jti'];
         $this->redisService->isJtiInWhiteList($jti);
 
         $userId = $this->userId();
@@ -98,7 +102,7 @@ class AuthService extends AbstractService
         $this->redisService->removeJti($jti, $userId);
 
         // Determine remember me
-        $tokenExpiration = $token->getClaims()->getPayload()['exp'] - $token->getClaims()->getPayload()['nbf'];
+        $tokenExpiration = $token['exp'] - $token['nbf'];
         $remember = $tokenExpiration > $this->config->auth->refreshTokenExpire ? 1 : 0;
 
         $newTokens = $this->jwt->generateTokens($userId, $remember);
@@ -133,6 +137,19 @@ class AuthService extends AbstractService
         $this->jwt->validateJwt($token);
         return true;
     }
+
+    /**
+     * Decode jwt token and get Payloads
+     * @return array
+     */
+    public function getJwtPayloads(): array
+    {
+        // Get JWT refresh token from headers
+        $jwt = $this->jwt->getAuthorizationToken();
+        $token = $this->jwt->decode($jwt);
+        return $token->getClaims()->getPayload();
+    }
+
 
     /**
      * Implements login throttling

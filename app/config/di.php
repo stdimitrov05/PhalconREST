@@ -75,8 +75,8 @@ $di->setShared('mailer', function () use ($config) {
 
 $di->set(
     'logger',
-    function () {
-        $adapter = new Stream(BASE_PATH . '/tmp/logs/main.log');
+    function () use ($config) {
+        $adapter = new Stream($config->application->logsDir . "/error.log");
         return new Logger('messages', ['main' => $adapter]);
     }
 );

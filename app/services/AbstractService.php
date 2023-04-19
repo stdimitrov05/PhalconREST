@@ -17,19 +17,11 @@ use App\Lib\JWT;
  */
 abstract class AbstractService extends \Phalcon\DI\Injectable
 {
-    /**
-     * Invalid parameters anywhere
-     */
     const ERROR_INVALID_PARAMETERS = 10010;
 
-    /**
-     * Record already exists
-     */
-    const ERROR_ALREADY_EXISTS = 10020;
-
-    const  ERROR_NOT_FOUND = 10040;
-    const  ERROR_UNABLE_TO_CREATE = 10050;
-    const  ERROR_UNABLE_TO_DELETE = 10060;
+    const ERROR_NOT_FOUND = 10040;
+    const ERROR_UNABLE_TO_CREATE = 10050;
+    const ERROR_UNABLE_TO_DELETE = 10060;
 
     const ERROR_USER_NOT_ACTIVE = 11010;
     const ERROR_WRONG_EMAIL_OR_PASSWORD = 11020;

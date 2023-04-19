@@ -21,8 +21,8 @@ return new \Phalcon\Config\Config(
             'publicUrl' => "https://" . getenv("DOMAIN"),
         ],
         'redis' => [
-            'redisHost' => getenv('REDIS_HOST'),
-            'redisPort' => getenv('REDIS_PORT'),
+            'host' => getenv('REDIS_HOST'),
+            'port' => getenv('REDIS_PORT'),
             'usersPrefix' => getenv('REDIS_USERS_PREFIX'),
             'jtiPostfix' => getenv('REDIS_JTI_POSTFIX'),
             'whiteListPrefix' => getenv('REDIS_WHITE_LIST_PREFIX')
@@ -30,9 +30,9 @@ return new \Phalcon\Config\Config(
         'mail' => [
             'noreplyEmail' => getenv('NOREPLY_EMAIL'),
             'noreplyName' => getenv('NOREPLY_NAME'),
-            'emailHost' => getenv('EMAIL_HOST'),
-            'emailPort' => getenv('EMAIL_PORT'),
-            'emailSmtpSecure' => getenv('SMTPSECURE'),
+            'host' => getenv('EMAIL_HOST'),
+            'port' => getenv('EMAIL_PORT'),
+            'smtpSecure' => getenv('SMTPSECURE'),
         ],
         'auth' => [
             'key' => getenv('JWT_KEY'),

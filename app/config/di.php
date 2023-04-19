@@ -48,8 +48,8 @@ $di->setShared('redis', function () use ($config) {
 
     try {
         $redis->connect(
-            $config->redis->redisHost,
-            $config->redis->redisPort
+            $config->redis->host,
+            $config->redis->port
         );
         return $redis;
     } catch (RedisException $exception) {
@@ -63,10 +63,10 @@ $di->setShared('redis', function () use ($config) {
 $di->setShared('mailer', function () use ($config) {
     $phpMailer = new PHPMailer\PHPMailer\PHPMailer();
     $phpMailer->isSMTP();
-    $phpMailer->SMTPSecure = $config->mail->emailSmtpSecure;
-    $phpMailer->Host = $config->mail->emailHost;
+    $phpMailer->SMTPSecure = $config->mail->smtpSecure;
+    $phpMailer->Host = $config->mail->host;
     $phpMailer->SMTPAuth = true;
-    $phpMailer->Port = $config->mail->emailPort;
+    $phpMailer->Port = $config->mail->port;
     $phpMailer->Username = $config->mail->noreplyEmail;
     $phpMailer->Password = getenv("NOREPLY_PASSWORD");
 
@@ -103,12 +103,12 @@ $di->setShared(
 
         $connection = new Mysql(
             [
-                "host" => $config->database->host,
-                "username" => $config->database->username,
-                "password" => $config->database->password,
-                "dbname" => $config->database->dbname,
-                "charset" => $config->database->charset,
-                "collation" => $config->database->collation,
+                "host" => $config->db->host,
+                "username" => $config->db->username,
+                "password" => $config->db->password,
+                "dbname" => $config->db->dbname,
+                "charset" => $config->db->charset,
+                "collation" => $config->db->collation,
                 'options' => [
                     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
                     PDO::ATTR_EMULATE_PREPARES => false,

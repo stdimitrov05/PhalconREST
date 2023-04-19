@@ -20,7 +20,6 @@ class UsersService extends AbstractService
      * @param array $data
      * @throws ServiceException
      * @return void 
-     * 
      */
     public function create(array $data): void
     {
@@ -28,8 +27,8 @@ class UsersService extends AbstractService
         $user->assign($data);
         $isCreated = $user->create();
 
-        if ($isCreated !== true) {
-            throw  new ServiceException(
+        if (!$isCreated) {
+            throw new ServiceException(
                 'Unable to create user',
                 self::ERROR_UNABLE_TO_CREATE
             );

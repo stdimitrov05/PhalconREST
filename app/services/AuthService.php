@@ -89,9 +89,9 @@ class AuthService extends AbstractService
      */
     public function refreshJwtTokens(): array
     {
-        // Validate jwt 
+        // Validate jwt
         $this->verifyToken();
-        $token = $this->getJwtPayloads();
+        $token = $this->jwt->getPayloads();
 
         // Check if jti is in the white list (redis)
         $jti = $token['jti'];
@@ -137,19 +137,6 @@ class AuthService extends AbstractService
         $this->jwt->validateJwt($token);
         return true;
     }
-
-    /**
-     * Decode jwt token and get Payloads
-     * @return array
-     */
-    public function getJwtPayloads(): array
-    {
-        // Get JWT refresh token from headers
-        $jwt = $this->jwt->getAuthorizationToken();
-        $token = $this->jwt->decode($jwt);
-        return $token->getClaims()->getPayload();
-    }
-
 
     /**
      * Implements login throttling

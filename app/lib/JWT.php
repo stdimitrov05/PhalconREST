@@ -127,7 +127,19 @@ class JWT extends AbstractService
             );
         }
     }
-
+     
+   /**
+     * Decode jwt token and get Payloads
+     * @return array
+     */
+    public function getPayloads(): array
+    {
+        // Get JWT refresh token from headers
+        $jwt = $this->getAuthorizationToken();
+        $token = $this->decode($jwt);
+        return $token->getClaims()->getPayload();
+    }
+    
     /**
      * Get authorization header
      * @return false|string

@@ -2,13 +2,13 @@
 FROM composer:latest as composer
 
 # Use the php:8.1-fpm image as the base image
-FROM php:8.1-fpm
+FROM php:8.2-fpm
 
 # Set the working directory to /var/www/php
 WORKDIR /var/www/php
 
 # Set the Phalcon version to 5.2.1 as an environment variable
-ENV PHALCON_VERSION="5.2.1"
+ENV PHALCON_VERSION="5.2.3"
 
 # Update the package manager and install necessary packages
 RUN apt update -y && \

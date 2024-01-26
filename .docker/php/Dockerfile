@@ -1,68 +1,55 @@
-# Use the composer:latest image as a build stage to install Composer
+# Composer (use on local dev only)
 FROM composer:latest as composer
 
-# Use the php:8.1-fpm image as the base image
-FROM php:8.2-fpm
+FROM php:8.3.1-fpm
 
-# Set the working directory to /var/www/php
-WORKDIR /var/www/php
+ENV PHALCON_VERSION=5.6.0 \
+    EXT_REDIS_VERSION=6.0.2 \
+    EXT_IGBINARY_VERSION=3.2.15
 
-# Set the Phalcon version to 5.2.1 as an environment variable
-ENV PHALCON_VERSION="5.2.3"
-
-# Update the package manager and install necessary packages
+# Update
 RUN apt update -y && \
     apt install -y \
         gettext \
         libzip-dev \
         zip \
-        libpng-dev \
-        libwebp-dev \
-        libjpeg62-turbo-dev \
-        libxpm-dev \
-        libfreetype6-dev
+        libicu-dev
 
-# Install Redis and Phalcon extensions via PECL
-RUN pecl install -o -f redis && \
-    pecl install phalcon-${PHALCON_VERSION} xdebug
+RUN docker-php-source extract \
+    # igbinary
+    && mkdir -p /usr/src/php/ext/igbinary \
+    &&  curl -fsSL https://github.com/igbinary/igbinary/archive/$EXT_IGBINARY_VERSION.tar.gz | tar xvz -C /usr/src/php/ext/igbinary --strip 1 \
+    && docker-php-ext-install igbinary \
+    # redis
+    && mkdir -p /usr/src/php/ext/redis \
+    && curl -fsSL https://github.com/phpredis/phpredis/archive/$EXT_REDIS_VERSION.tar.gz | tar xvz -C /usr/src/php/ext/redis --strip 1 \
+    && docker-php-ext-configure redis --enable-redis-igbinary \
+    && docker-php-ext-install redis \
+    # cleanup
+    && docker-php-source delete
 
-# Configure the GD extension with JPEG, WebP, XPM, and Freetype support
-RUN docker-php-ext-configure gd \
-    --prefix=/usr \
-    --with-jpeg \
-    --with-webp \
-    --with-xpm \
-    --with-freetype
+# PECL Packages
+RUN pecl install phalcon-${PHALCON_VERSION}
 
-# Install PHP extensions via the PHP extension installer
+# Install PHP extensions
 RUN docker-php-ext-install \
       gettext \
       pdo_mysql \
-      zip \
-      gd
+      zip
 
 # Enable PHP extensions
-RUN docker-php-ext-enable \
-      opcache \
-      phalcon \
-      redis \
-      xdebug
+RUN docker-php-ext-enable phalcon
 
-# Clear cache and remove unnecessary files
+# Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-# Composer
-COPY --from=composer /usr/bin/composer /usr/local/bin/composer
-# Bash script with helper aliases
-COPY ./.bashrc /root/.bashrc
-COPY ./.bashrc /home/phalcon/.bashrc
 
-# Composer
+# Composer (use on local dev only)
 COPY --from=composer /usr/bin/composer /usr/local/bin/composer
 
 # Bash script with helper aliases
 COPY ./.bashrc /root/.bashrc
-COPY ./.bashrc /home/phalcon/.bashrc
 
+# Set working directory
+WORKDIR /var/www/php
 
-# Set the default command to run PHP-FPM
 CMD ["php-fpm"]

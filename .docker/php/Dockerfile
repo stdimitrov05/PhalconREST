@@ -3,7 +3,7 @@ FROM composer:latest as composer
 
 FROM php:8.3.1-fpm
 
-ENV PHALCON_VERSION=5.6.0 \
+ENV PHALCON_VERSION=5.7.0 \
     EXT_REDIS_VERSION=6.0.2 \
     EXT_IGBINARY_VERSION=3.2.15
 
